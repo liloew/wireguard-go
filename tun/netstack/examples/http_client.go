@@ -14,9 +14,9 @@ import (
 	"net/http"
 
 	"golang.zx2c4.com/go118/netip"
-	"golang.zx2c4.com/wireguard/conn"
-	"golang.zx2c4.com/wireguard/device"
-	"golang.zx2c4.com/wireguard/tun/netstack"
+	"github.com/liloew/wireguard/conn"
+	"github.com/liloew/wireguard/device"
+	"github.com/liloew/wireguard/tun/netstack"
 )
 
 func main() {
