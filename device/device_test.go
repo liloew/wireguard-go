@@ -19,9 +19,9 @@ import (
 	"time"
 
 	"golang.zx2c4.com/go118/netip"
-	"github.com/liloew/wireguard/conn"
-	"github.com/liloew/wireguard/conn/bindtest"
-	"github.com/liloew/wireguard/tun/tuntest"
+	"github.com/liloew/wireguard-go/conn"
+	"github.com/liloew/wireguard-go/conn/bindtest"
+	"github.com/liloew/wireguard-go/tun/tuntest"
 )
 
 // uapiCfg returns a string that contains cfg formatted use with IpcSet.

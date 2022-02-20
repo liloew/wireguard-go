@@ -1,4 +1,4 @@
-module github.com/liloew/wireguard
+module github.com/liloew/wireguard-go
 
 go 1.17
 

@@ -19,7 +19,7 @@ import (
 	"time"
 
 	"golang.zx2c4.com/go118/netip"
-	"github.com/liloew/wireguard/ipc"
+	"github.com/liloew/wireguard-go/ipc"
 )
 
 type IPCError struct {

@@ -20,7 +20,7 @@ import (
 	"time"
 
 	"golang.zx2c4.com/go118/netip"
-	"github.com/liloew/wireguard/tun"
+	"github.com/liloew/wireguard-go/tun"
 
 	"golang.org/x/net/dns/dnsmessage"
 	"gvisor.dev/gvisor/pkg/tcpip"

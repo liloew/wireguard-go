@@ -11,10 +11,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/liloew/wireguard/conn"
-	"github.com/liloew/wireguard/ratelimiter"
-	"github.com/liloew/wireguard/rwcancel"
-	"github.com/liloew/wireguard/tun"
+	"github.com/liloew/wireguard-go/conn"
+	"github.com/liloew/wireguard-go/ratelimiter"
+	"github.com/liloew/wireguard-go/rwcancel"
+	"github.com/liloew/wireguard-go/tun"
 )
 
 type Device struct {
