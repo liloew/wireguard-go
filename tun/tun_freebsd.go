@@ -159,7 +159,7 @@ func tunDestroy(name string) error {
 	return nil
 }
 
-func CreateTUN(name string, mtu int) (Device, error) {
+func CreateTUN(name string, mtu int, nopi bool) (Device, error) {
 	if len(name) > unix.IFNAMSIZ-1 {
 		return nil, errors.New("interface name too long")
 	}
@@ -258,10 +258,10 @@ func CreateTUN(name string, mtu int) (Device, error) {
 		}
 	}
 
-	return CreateTUNFromFile(tunFile, mtu)
+	return CreateTUNFromFile(tunFile, mtu, nopi)
 }
 
-func CreateTUNFromFile(file *os.File, mtu int) (Device, error) {
+func CreateTUNFromFile(file *os.File, mtu int, nopi bool) (Device, error) {
 	tun := &NativeTun{
 		tunFile: file,
 		events:  make(chan Event, 10),

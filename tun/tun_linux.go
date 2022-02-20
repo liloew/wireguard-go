@@ -404,7 +404,7 @@ func (tun *NativeTun) Close() error {
 	return err2
 }
 
-func CreateTUN(name string, mtu int) (Device, error) {
+func CreateTUN(name string, mtu int, nopi bool) (Device, error) {
 	nfd, err := unix.Open(cloneDevicePath, os.O_RDWR, 0)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -415,6 +415,9 @@ func CreateTUN(name string, mtu int) (Device, error) {
 
 	var ifr [ifReqSize]byte
 	var flags uint16 = unix.IFF_TUN // | unix.IFF_NO_PI (disabled for TUN status hack)
+	if nopi {
+		flags |= unix.IFF_NO_PI
+	}
 	nameBytes := []byte(name)
 	if len(nameBytes) >= unix.IFNAMSIZ {
 		unix.Close(nfd)
@@ -443,16 +446,16 @@ func CreateTUN(name string, mtu int) (Device, error) {
 	// Note that the above -- open,ioctl,nonblock -- must happen prior to handing it to netpoll as below this line.
 
 	fd := os.NewFile(uintptr(nfd), cloneDevicePath)
-	return CreateTUNFromFile(fd, mtu)
+	return CreateTUNFromFile(fd, mtu, nopi)
 }
 
-func CreateTUNFromFile(file *os.File, mtu int) (Device, error) {
+func CreateTUNFromFile(file *os.File, mtu int, nopi bool) (Device, error) {
 	tun := &NativeTun{
 		tunFile:                 file,
 		events:                  make(chan Event, 5),
 		errors:                  make(chan error, 5),
 		statusListenersShutdown: make(chan struct{}),
-		nopi:                    false,
+		nopi:                    nopi,
 	}
 
 	name, err := tun.Name()

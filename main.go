@@ -58,7 +58,7 @@ func warning() {
 }
 
 func main() {
-	if len(os.Args) == 2 && os.Args[1] == "--version" {
+	if len(os.Args) == 3 && os.Args[1] == "--version" {
 		fmt.Printf("wireguard-go v%s\n\nUserspace WireGuard daemon for %s-%s.\nInformation available at https://www.wireguard.com.\nCopyright (C) Jason A. Donenfeld <Jason@zx2c4.com>.\n", Version, runtime.GOOS, runtime.GOARCH)
 		return
 	}
@@ -67,6 +67,7 @@ func main() {
 
 	var foreground bool
 	var interfaceName string
+	var nopi bool
 	if len(os.Args) < 2 || len(os.Args) > 3 {
 		printUsage()
 		return
@@ -114,7 +115,7 @@ func main() {
 	tun, err := func() (tun.Device, error) {
 		tunFdStr := os.Getenv(ENV_WG_TUN_FD)
 		if tunFdStr == "" {
-			return tun.CreateTUN(interfaceName, device.DefaultMTU)
+			return tun.CreateTUN(interfaceName, device.DefaultMTU, nopi)
 		}
 
 		// construct tun device from supplied fd
@@ -130,7 +131,7 @@ func main() {
 		}
 
 		file := os.NewFile(uintptr(fd), "")
-		return tun.CreateTUNFromFile(file, device.DefaultMTU)
+		return tun.CreateTUNFromFile(file, device.DefaultMTU, nopi)
 	}()
 
 	if err == nil {

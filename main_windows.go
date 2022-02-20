@@ -37,7 +37,7 @@ func main() {
 	)
 	logger.Verbosef("Starting wireguard-go version %s", Version)
 
-	tun, err := tun.CreateTUN(interfaceName, 0)
+	tun, err := tun.CreateTUN(interfaceName, 0, false)
 	if err == nil {
 		realInterfaceName, err2 := tun.Name()
 		if err2 == nil {

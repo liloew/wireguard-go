@@ -98,7 +98,7 @@ func (tun *NativeTun) routineRouteListener(tunIfindex int) {
 	}
 }
 
-func CreateTUN(name string, mtu int) (Device, error) {
+func CreateTUN(name string, mtu int, nopi bool) (Device, error) {
 	ifIndex := -1
 	if name != "utun" {
 		_, err := fmt.Sscanf(name, "utun%d", &ifIndex)
@@ -136,7 +136,7 @@ func CreateTUN(name string, mtu int) (Device, error) {
 		unix.Close(fd)
 		return nil, err
 	}
-	tun, err := CreateTUNFromFile(os.NewFile(uintptr(fd), ""), mtu)
+	tun, err := CreateTUNFromFile(os.NewFile(uintptr(fd), ""), mtu, nopi)
 
 	if err == nil && name == "utun" {
 		fname := os.Getenv("WG_TUN_NAME_FILE")
@@ -148,7 +148,7 @@ func CreateTUN(name string, mtu int) (Device, error) {
 	return tun, err
 }
 
-func CreateTUNFromFile(file *os.File, mtu int) (Device, error) {
+func CreateTUNFromFile(file *os.File, mtu int, nopi bool) (Device, error) {
 	tun := &NativeTun{
 		tunFile: file,
 		events:  make(chan Event, 10),
