@@ -222,11 +222,15 @@ func (tun *NativeTun) Read(buff []byte, offset int) (int, error) {
 	case err := <-tun.errors:
 		return 0, err
 	default:
-		buff := buff[offset-4:]
-		n, err := tun.tunFile.Read(buff[:])
+		mu := sync.Mutex{}
+		mu.Lock()
+		defer mu.Unlock()
+		bf := make([]byte, len(buff))
+		n, err := tun.tunFile.Read(bf)
 		if n < 4 {
 			return 0, err
 		}
+		copy(buff, bf[len(bf)-4:])
 		return n - 4, err
 	}
 }
