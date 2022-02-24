@@ -238,23 +238,24 @@ func (tun *NativeTun) Read(buff []byte, offset int) (int, error) {
 func (tun *NativeTun) Write(buff []byte, offset int) (int, error) {
 	// reserve space for header
 
-	buff = buff[offset-4:]
+	mu := sync.Mutex{}
+	mu.Lock()
+	defer mu.Unlock()
+	bf := make([]byte, len(buff)+4)
 
 	// add packet information header
-
-	buff[0] = 0x00
-	buff[1] = 0x00
-	buff[2] = 0x00
-
+	bf[0] = 0x00
+	bf[1] = 0x00
+	bf[2] = 0x00
 	if buff[4]>>4 == ipv6.Version {
-		buff[3] = unix.AF_INET6
+		bf[3] = unix.AF_INET6
 	} else {
-		buff[3] = unix.AF_INET
+		bf[3] = unix.AF_INET
 	}
 
+	copy(bf[4:], buff)
 	// write
-
-	return tun.tunFile.Write(buff)
+	return tun.tunFile.Write(bf)
 }
 
 func (tun *NativeTun) Flush() error {
